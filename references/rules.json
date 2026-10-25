@@ -1,0 +1,163 @@
+{
+  "version": 3,
+  "defaults": {
+    "skipStyles": [
+      "Caption",
+      "题注",
+      "代码",
+      "引用",
+      "HTML Preformatted"
+    ],
+    "blankRunThreshold": 3
+  },
+  "presets": {
+    "实验报告": {
+      "description": "常见工科实验报告：正文宋体小四、1.5 倍行距、首行缩进 2 字符",
+      "body": {
+        "size": 24,
+        "eastAsia": "宋体",
+        "firstLineChars": 2,
+        "lineSpacing": 1.5
+      },
+      "headings": {
+        "1": {
+          "size": 32,
+          "bold": true
+        },
+        "2": {
+          "size": 28,
+          "bold": true
+        },
+        "3": {
+          "size": 24,
+          "bold": true
+        }
+      },
+      "header": {
+        "requireStudentId": true,
+        "requireStudentName": true
+      },
+      "margins": {
+        "top": 2.54,
+        "bottom": 2.54,
+        "left": 3.0,
+        "right": 2.5
+      },
+      "bodyRange": {
+        "startAfter": "^(?:第?\\s*[一二三四五六七八九十0-9]+\\s*[章节、.．\\s]+\\s*)?(?:摘\\s*要|实验目的|引\\s*言|前\\s*言)",
+        "endAt": "^(?:第?\\s*[一二三四五六七八九十0-9]+\\s*[章节、.．\\s]+\\s*)?(?:参考文献|致\\s*谢|附\\s*录|附\\s*件)"
+      },
+      "captions": {
+        "scheme": "any",
+        "requireFigureCaption": true
+      },
+      "checkBreaks": true
+    },
+    "学位论文": {
+      "description": "常见本科毕业论文：正文小四宋体、1.5 倍行距、左侧装订边距 3cm、图题分章编号",
+      "body": {
+        "size": 24,
+        "eastAsia": "宋体",
+        "firstLineChars": 2,
+        "lineSpacing": 1.5
+      },
+      "headings": {
+        "1": {
+          "size": 36,
+          "bold": true
+        },
+        "2": {
+          "size": 32,
+          "bold": true
+        },
+        "3": {
+          "size": 28,
+          "bold": true
+        }
+      },
+      "header": {
+        "requireStudentId": true,
+        "requireStudentName": true
+      },
+      "margins": {
+        "top": 2.54,
+        "bottom": 2.54,
+        "left": 3.0,
+        "right": 2.5
+      },
+      "bodyRange": {
+        "startAfter": "^(?:第?\\s*[一二三四五六七八九十0-9]+\\s*[章节、.．\\s]+\\s*)?(?:摘\\s*要|绪\\s*论|引\\s*言|前\\s*言)",
+        "endAt": "^(?:第?\\s*[一二三四五六七八九十0-9]+\\s*[章节、.．\\s]+\\s*)?(?:参考文献|致\\s*谢|附\\s*录|附\\s*件)"
+      },
+      "captions": {
+        "scheme": "chapter",
+        "requireFigureCaption": true,
+        "requireTableCaption": true
+      },
+      "checkBreaks": true
+    },
+    "宽松版": {
+      "description": "只查页眉学号姓名、页边距、以及「有图却没图题」。字号行距字体一律不查，适合格式要求不明确的课",
+      "header": {
+        "requireStudentId": true,
+        "requireStudentName": true
+      },
+      "margins": {
+        "top": 2.54,
+        "bottom": 2.54,
+        "left": 3.0,
+        "right": 2.5
+      },
+      "captions": {
+        "scheme": "none",
+        "requireFigureCaption": true
+      }
+    },
+    "实验报告-黑体": {
+      "description": "正文黑体小四、行距固定值或 1.5 倍均可、首行缩进 2 字符；一级标题黑体三号，二三级黑体小四；页边距 2.54/2.5/2.0",
+      "body": {
+        "size": 24,
+        "eastAsia": "黑体",
+        "firstLineChars": 2,
+        "lineSpacing": 1.5,
+        "allowFixedLineSpacing": true
+      },
+      "headings": {
+        "1": {
+          "size": 32,
+          "bold": true,
+          "eastAsia": "黑体"
+        },
+        "2": {
+          "size": 24,
+          "bold": true,
+          "eastAsia": "黑体"
+        },
+        "3": {
+          "size": 24,
+          "bold": true,
+          "eastAsia": "黑体"
+        }
+      },
+      "header": {
+        "requireStudentId": true,
+        "requireStudentName": true
+      },
+      "margins": {
+        "top": 2.54,
+        "bottom": 2.54,
+        "left": 2.5,
+        "right": 2.0
+      },
+      "bodyRange": {
+        "startAfter": "^(?:第?\\s*[一二三四五六七八九十0-9]+\\s*[章节、.．\\s]+\\s*)?(?:摘\\s*要|实验目的|引\\s*言|前\\s*言)",
+        "endAt": "^(?:第?\\s*[一二三四五六七八九十0-9]+\\s*[章节、.．\\s]+\\s*)?(?:参考文献|致\\s*谢|附\\s*录|附\\s*件)"
+      },
+      "captions": {
+        "scheme": "any",
+        "requireFigureCaption": true
+      },
+      "checkBreaks": true
+    }
+  }
+}

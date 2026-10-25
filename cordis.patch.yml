@@ -1,0 +1,16 @@
+# paper-format-check 的 bundle patch 层。
+#
+# `dsh plugin add github:Stephen-pc/paper-format-check`（或本地路径）会读本文件，
+# 把这条 loader entry 插进 profile 树。
+#
+# 两条硬规则：
+#   · `name` 必须与 package.json 的 `name` 完全一致，写成别的会在开机解析时失败；
+#   · `id` 是 Cordis 插件 id（= lib/index.js 的 `export const name`），
+#     `name` 是 npm 包名（安装后从 node_modules 解析）。
+#
+# 本插件没有需要在这里覆写的配置：它只把包自带的 SKILL.md 挂进技能目录，
+# 没有阈值、没有端点、没有密钥。判定逻辑与规则库全部在 scripts/check.py 与
+# references/rules.json 里，随包分发，不进这里。
+- insert:
+    - id: paper-format-check
+      name: 'paper-format-check'

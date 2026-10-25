@@ -1,0 +1,241 @@
+{
+  "_comment": "fixture 的期望结果。断言只用粗粒度三件：退出码、summary、checked —— 不断言文案原文，文案会改。",
+  "cases": [
+    {
+      "file": "clean.docx",
+      "preset": "实验报告",
+      "exit": 0,
+      "error": 0,
+      "warn": 0,
+      "checked": [
+        "header",
+        "margins",
+        "bodyRange",
+        "body",
+        "breaks",
+        "captions",
+        "headings"
+      ]
+    },
+    {
+      "file": "bad.docx",
+      "preset": "实验报告",
+      "exit": 1,
+      "error": 7,
+      "warn": 1,
+      "kinds": [
+        "header",
+        "body",
+        "captions"
+      ]
+    },
+    {
+      "file": "grid.docx",
+      "preset": "实验报告",
+      "exit": 0,
+      "error": 0,
+      "warn": 0
+    },
+    {
+      "file": "grid-mismatch.docx",
+      "preset": "实验报告",
+      "exit": 0,
+      "error": 0,
+      "warn": 1
+    },
+    {
+      "file": "fixed-line.docx",
+      "preset": "实验报告",
+      "exit": 0,
+      "error": 0,
+      "warn": 1
+    },
+    {
+      "file": "breaks.docx",
+      "preset": "实验报告",
+      "exit": 0,
+      "error": 0,
+      "warn": 2,
+      "kinds": [
+        "breaks"
+      ]
+    },
+    {
+      "file": "nocaption.docx",
+      "preset": "实验报告",
+      "exit": 0,
+      "error": 0,
+      "warn": 1,
+      "kinds": [
+        "captions"
+      ]
+    },
+    {
+      "file": "header-logo.docx",
+      "preset": "实验报告",
+      "exit": 0,
+      "error": 0,
+      "warn": 0
+    },
+    {
+      "file": "wps-indent.docx",
+      "preset": "实验报告",
+      "exit": 0,
+      "error": 0,
+      "warn": 0
+    },
+    {
+      "file": "table-list.docx",
+      "preset": "实验报告",
+      "exit": 0,
+      "error": 0,
+      "warn": 0
+    },
+    {
+      "file": "margins-bad.docx",
+      "preset": "实验报告",
+      "exit": 1,
+      "error": 4,
+      "warn": 0,
+      "kinds": [
+        "margins"
+      ]
+    },
+    {
+      "file": "cover.docx",
+      "preset": "实验报告",
+      "exit": 0,
+      "error": 0,
+      "warn": 0,
+      "checked": [
+        "bodyRange"
+      ]
+    },
+    {
+      "file": "seq-caption.docx",
+      "preset": "实验报告",
+      "exit": 0,
+      "error": 0,
+      "warn": 0
+    },
+    {
+      "file": "table-caption.docx",
+      "preset": "实验报告",
+      "exit": 1,
+      "error": 1,
+      "warn": 0,
+      "kinds": [
+        "captions"
+      ]
+    },
+    {
+      "file": "endat-guard.docx",
+      "preset": "实验报告",
+      "exit": 1,
+      "error": 3,
+      "warn": 0,
+      "kinds": [
+        "body"
+      ],
+      "checked": [
+        "bodyRange"
+      ]
+    },
+    {
+      "file": "endat-numbered-refs.docx",
+      "preset": "实验报告",
+      "exit": 0,
+      "error": 0,
+      "warn": 0,
+      "checked": [
+        "bodyRange"
+      ]
+    },
+    {
+      "file": "hanging-indent.docx",
+      "preset": "实验报告",
+      "exit": 0,
+      "error": 0,
+      "warn": 0
+    },
+    {
+      "file": "mixed-captions.docx",
+      "preset": "实验报告",
+      "exit": 0,
+      "error": 0,
+      "warn": 0,
+      "kinds": [
+        "captions"
+      ]
+    },
+    {
+      "file": "cover-xulun.docx",
+      "preset": "学位论文",
+      "exit": 0,
+      "error": 0,
+      "checked": [
+        "bodyRange"
+      ]
+    },
+    {
+      "file": "cover-fallback.docx",
+      "preset": "实验报告",
+      "exit": 0,
+      "error": 0,
+      "warn": 0,
+      "kinds": [
+        "bodyRange"
+      ]
+    },
+    {
+      "file": "two-sections.docx",
+      "preset": "实验报告",
+      "exit": 1,
+      "error": 2,
+      "warn": 0,
+      "kinds": [
+        "margins"
+      ],
+      "sections": 2
+    },
+    {
+      "file": "caption-3level.docx",
+      "preset": "实验报告",
+      "exit": 0,
+      "error": 0,
+      "warn": 0
+    },
+    {
+      "file": "code-block.docx",
+      "preset": "实验报告",
+      "exit": 0,
+      "error": 0,
+      "warn": 0
+    },
+    {
+      "file": "broken.docx",
+      "preset": "实验报告",
+      "exit": 2
+    }
+  ],
+  "special": [
+    {
+      "name": "全 null 预设不许判通过",
+      "rules": "nulls",
+      "file": "clean.docx",
+      "preset": "空",
+      "exit": 1,
+      "checkedEmpty": true
+    },
+    {
+      "name": "--strict 下 warn 也算失败",
+      "file": "fixed-line.docx",
+      "preset": "实验报告",
+      "extra": [
+        "--strict"
+      ],
+      "exit": 1,
+      "passed": false
+    }
+  ]
+}

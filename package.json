@@ -1,0 +1,53 @@
+{
+  "name": "paper-format-check",
+  "version": "0.1.0",
+  "description": "论文 / 实验报告格式体检：只读检查 docx 的字号、首行缩进、行距、页眉学号姓名、页边距、图题表题，给出可定位的修法。",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "SKILL.md",
+    "scripts",
+    "references",
+    "README.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Stephen-pc/paper-format-check.git"
+  },
+  "homepage": "https://github.com/Stephen-pc/paper-format-check#readme",
+  "bugs": {
+    "url": "https://github.com/Stephen-pc/paper-format-check/issues"
+  },
+  "scripts": {
+    "selftest": "node tools/dsh-selftest.mjs"
+  },
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "cordis",
+    "skill",
+    "docx",
+    "format",
+    "thesis",
+    "report",
+    "no-dependencies"
+  ],
+  "license": "MIT"
+}

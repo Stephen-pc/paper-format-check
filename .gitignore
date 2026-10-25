@@ -1,0 +1,4 @@
+# 真实语料不入库（含学号姓名），只提交快照
+tests/fixtures/real/*.docx
+node_modules/
+*.tgz

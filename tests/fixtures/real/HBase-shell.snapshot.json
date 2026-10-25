@@ -1,0 +1,83 @@
+{
+  "note": "首份真实文档的快照。docx 本身不入库（含学号姓名），本地放到 tests/fixtures/real/HBase-shell.docx 即可参与回归。",
+  "source": "HBase shell 基本操作及列族设计_0125-彭超.docx",
+  "preset": "实验报告-黑体",
+  "stats": {
+    "paragraphs": 255,
+    "tables": 1,
+    "images": 46,
+    "sections": 1,
+    "checked": [
+      "header",
+      "margins",
+      "body",
+      "breaks",
+      "captions",
+      "headings"
+    ],
+    "occurrences": 20
+  },
+  "summary": {
+    "error": 2,
+    "warn": 14,
+    "info": 4
+  },
+  "verdict": "有 2 处必须修改",
+  "findings": [
+    {
+      "kind": "bodyRange",
+      "severity": "info",
+      "count": 1,
+      "problem": "正文起点没匹配到，已从第一个标题之后开始检查（已排除封面与目录）",
+      "samples": []
+    },
+    {
+      "kind": "body",
+      "severity": "warn",
+      "count": 12,
+      "problem": "行距未显式设置（默认单倍），要求 1.5 倍",
+      "samples": [
+        "1.进入Shell界面 · 第 18 段",
+        "3.创建空间名称 · 第 29 段",
+        "6）用正则筛出前缀相同的表 · 第 82 段"
+      ]
+    },
+    {
+      "kind": "body",
+      "severity": "info",
+      "count": 2,
+      "problem": "该段未显式设置字号，实际由样式或文档默认值决定",
+      "samples": [
+        "6）用正则筛出前缀相同的表 · 第 82 段",
+        "8）跨命名空间列出同前缀的表 · 第 94 段"
+      ]
+    },
+    {
+      "kind": "body",
+      "severity": "error",
+      "count": 2,
+      "problem": "没有首行缩进，要求缩进 2 字符",
+      "samples": [
+        "6）用正则筛出前缀相同的表 · 第 82 段",
+        "8）跨命名空间列出同前缀的表 · 第 94 段"
+      ]
+    },
+    {
+      "kind": "body",
+      "severity": "warn",
+      "count": 2,
+      "problem": "中文字体是 微软雅黑，要求 黑体",
+      "samples": [
+        "6）用正则筛出前缀相同的表 · 第 82 段",
+        "8）跨命名空间列出同前缀的表 · 第 94 段"
+      ]
+    },
+    {
+      "kind": "captions",
+      "severity": "info",
+      "count": 1,
+      "problem": "图题编号级数不一致：2 级 9 个、3 级 44 个，连续性只按占多数的 3 级核对",
+      "samples": []
+    }
+  ]
+}
