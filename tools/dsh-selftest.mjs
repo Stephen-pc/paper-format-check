@@ -149,6 +149,24 @@ function assertCase(spec, rulesDir) {
   }
 }
 
+function assertBatch() {
+  // 批量模式的契约：counts 之和等于份数；有要退的份时退出码为 1；
+  // 读不了的文件单独归类，不能混进「要退」（否则「要退几份」这个数失真）。
+  const { status, stdout, stderr } = runCheck(['--batch', FIXTURES, '--json'], 'batch')
+  const data = parseJson(stdout)
+  if (!data) {
+    report(false, '批量输出可解析', stderr.slice(0, 200))
+    return
+  }
+  const { pass, fail, unreadable } = data.counts
+  report(pass + fail + unreadable === data.count, '批量 counts 之和等于份数',
+    `${pass}+${fail}+${unreadable} vs ${data.count}`)
+  report(data.count >= 25, '批量扫到至少 25 份', `实际 ${data.count}`)
+  report(fail >= 5, '批量识别出要退的文件', `实际 ${fail}`)
+  report(unreadable >= 1, '损坏文件归入读不了而非要退', `实际 ${unreadable}`)
+  report(status === 1, '批量有要退时退出码为 1', `实际 ${status}`)
+}
+
 function assertRealDoc() {
   // 真实文档不入库（含学号姓名）。本地把 docx 放到 tests/fixtures/real/ 下即可参与回归，
   // 否则跳过 —— 但跳过要说出来，不能静默显示「全绿」让人以为跑过了。
@@ -233,6 +251,9 @@ function main() {
   } finally {
     rmSync(tmp, { recursive: true, force: true })
   }
+
+  console.log('\n[批量模式]')
+  assertBatch()
 
   console.log('\n[真实文档（可选）]')
   assertRealDoc()

@@ -71,7 +71,9 @@ def die(msg: str, code: int = 2):
     """以指定退出码退出。`raise SystemExit("文本")` 实际返回 1，CI 分不清
     「文件坏了」和「格式不合格」，所以显式给码。"""
     print(f'paper-format-check: {msg}', file=sys.stderr)
-    raise SystemExit(code)
+    exc = SystemExit(code)
+    exc.msg = msg          # 批量模式要显示「为什么读不了」，不能只有一句「读不了」
+    raise exc
 
 
 def describe_size(half_points: int | None) -> str:
@@ -1093,6 +1095,80 @@ def _group_findings(raw: list[dict]) -> list[dict]:
     return list(groups.values())
 
 
+def collect_docx(root: Path) -> list[Path]:
+    """目录下所有 .docx，递归；跳过 Word 的 ~$ 锁文件（162 字节，不是文档）。"""
+    if root.is_file():
+        return [root]
+    out = [p for p in sorted(root.rglob('*.docx')) if not p.name.startswith('~$')]
+    return out
+
+
+def run_batch(root: Path, rules: dict, preset: str, sid: str, sname: str,
+              strict: bool, no_group: bool) -> dict:
+    """批量检查。每份只保留结论，不展开 findings —— 助教要的是「哪几份要退」。
+
+    读不了的文件单独归类：它既不是「收」也不是「格式不合格」，混进去会让
+    「要退几份」这个数失真。
+    """
+    files = collect_docx(root)
+    results: list[dict] = []
+    for f in files:
+        try:
+            r = run(f, rules, preset, sid, sname, strict, no_group)
+        except SystemExit as exc:
+            # die() 抛的：文件不存在/不是 docx/损坏。stderr 已经打过原因。
+            results.append({
+                'file': f.name, 'path': str(f), 'status': 'unreadable',
+                'exit': exc.code if isinstance(exc.code, int) else 2,
+                'summary': None, 'verdict': getattr(exc, 'msg', '读不了'),
+            })
+            continue
+        results.append({
+            'file': f.name, 'path': str(f),
+            'status': 'pass' if r['passed'] else 'fail',
+            'exit': 0 if r['passed'] else 1,
+            'summary': r['summary'], 'verdict': r['verdict'],
+        })
+
+    counts = {'pass': 0, 'fail': 0, 'unreadable': 0}
+    for r in results:
+        counts[r['status']] += 1
+    return {
+        'batch': str(root), 'preset': preset, 'strict': strict,
+        'count': len(results), 'counts': counts, 'results': results,
+    }
+
+
+def render_batch(batch: dict, fail_list: bool) -> str:
+    if fail_list:
+        # 只输出要退的路径，一行一个 —— 方便直接复制去发通知。
+        # 「读不了」也算要处理，但排在最后并加标记，避免被当成格式不合格。
+        bad = [r['path'] for r in batch['results'] if r['status'] == 'fail']
+        broken = [r['path'] for r in batch['results'] if r['status'] == 'unreadable']
+        out = bad + [f'{p}  (读不了)' for p in broken]
+        return '\n'.join(out)
+
+    lines = [f'批量：{batch["batch"]}　预设：{batch["preset"]}　共 {batch["count"]} 份', '']
+    width = max((len(r['file']) for r in batch['results']), default=10)
+    for r in batch['results']:
+        name = r['file'].ljust(min(width, 40))
+        if r['status'] == 'pass':
+            s = r['summary'] or {}
+            lines.append(f'{name}  收      error {s.get("error", 0)} · warn {s.get("warn", 0)}')
+        elif r['status'] == 'fail':
+            s = r['summary'] or {}
+            lines.append(f'{name}  要退    error {s.get("error", 0)} · warn {s.get("warn", 0)}')
+        else:
+            reason = str(r['verdict']).split('。')[0][:38]
+            lines.append(f'{name}  读不了  {reason}')
+    c = batch['counts']
+    lines.append('')
+    lines.append(f'汇总：{batch["count"]} 份 —— 收 {c["pass"]} · 要退 {c["fail"]} · 读不了 {c["unreadable"]}')
+    if batch['strict']:
+        lines.append('（--strict：warn 也计入要退）')
+    return '\n'.join(lines)
+
+
 def render(result: dict) -> str:
     lines: list[str] = []
     s = result['stats']
@@ -1148,6 +1224,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument('--strict', action='store_true', help='warn 也视为不通过（助教批改用）')
     ap.add_argument('--no-group', action='store_true',
                     help='人读输出不聚合，逐段列出每一处问题（JSON 始终是聚合形态）')
+    ap.add_argument('--batch', metavar='目录', help='批量检查目录下所有 .docx（递归，跳过 ~$ 锁文件）')
+    ap.add_argument('--fail-list', action='store_true',
+                    help='只输出要退的文件路径，一行一个（配合 --batch）')
     ap.add_argument('--ignore', default='',
                     help='一次性豁免，逗号分隔：margins,headings 或 body.size,body.eastAsia')
     args = ap.parse_args(argv)
@@ -1168,6 +1247,16 @@ def main(argv: list[str] | None = None) -> int:
     if args.show_rules:
         print(json.dumps(rules, ensure_ascii=False, indent=2))
         return 0
+
+    if args.batch:
+        batch = run_batch(Path(args.batch), rules, preset, args.student_id, args.student_name,
+                          args.strict, args.no_group)
+        batch['ignored'] = ignored
+        if args.json:
+            print(json.dumps(batch, ensure_ascii=False, indent=2))
+        else:
+            print(render_batch(batch, args.fail_list))
+        return 0 if batch['counts']['fail'] == 0 and batch['counts']['unreadable'] == 0 else 1
 
     if not args.file:
         ap.print_help()

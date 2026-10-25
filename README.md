@@ -76,6 +76,15 @@ python scripts/check.py 报告.docx --list-presets         # 看有哪些预设
 python scripts/check.py 报告.docx --show-rules           # 看实际生效的规则
 python scripts/check.py 报告.docx --json                 # 机器可读（永不截断）
 python scripts/check.py 报告.docx --strict               # warn 也算不通过
+python scripts/check.py 报告.docx --ignore margins        # 本次不查页边距
+```
+
+批量（助教批改）：
+
+```bash
+python scripts/check.py --batch 作业目录                  # 每份一行结论 + 汇总
+python scripts/check.py --batch 作业目录 --fail-list      # 只要要退的路径
+python scripts/check.py --batch 作业目录 --strict --fail-list
 ```
 
 退出码：`0` 通过，`1` 不通过，`2` 文件读不了（不存在 / 非 docx / 加密 / XML 损坏）。
