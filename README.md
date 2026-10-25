@@ -6,6 +6,8 @@
 
 零依赖（纯 Python 标准库，不需要 python-docx）、原件只读、判定口径保守。
 
+引擎分三层：`scripts/ooxml.py` 解析 docx、`scripts/checks.py` 判定、`scripts/check.py` 编排与 CLI —— 加规则不必碰 XML 解析。
+
 ```console
 $ python scripts/check.py 实验三_HBase\ shell\ 操作.docx --student-id 2411020125 --student-name 彭超
 
